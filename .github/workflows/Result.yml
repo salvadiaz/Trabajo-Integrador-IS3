@@ -1,0 +1,43 @@
+name: Result
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [ main ]
+
+jobs:
+  result_build:
+    name: Check Code Quality, Build, Test And Push Result
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check code quality
+        uses: codeinspectorio/github-action@master
+        with:
+          repo_token: ${{ secrets.GIT_TOKEN }}
+          code_inspector_access_key: ${{ secrets.CODE_INSPECTOR_ACCESS_KEY }}
+          code_inspector_secret_key: ${{ secrets.CODE_INSPECTOR_SECRET_KEY }}
+          min_quality_grade: 'WARNING'
+          min_quality_score: '0'
+          max_complex_functions_rate: '0.1'
+          max_long_functions_rate: '0.1'
+          max_defects_rate: '0.1'
+          max_violations_rate: '0.1'
+
+      - name: DockerHub Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Build Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/result ./result
+      - name: Push to Docker Hub
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/result
