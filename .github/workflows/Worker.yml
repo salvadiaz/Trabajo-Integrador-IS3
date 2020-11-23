@@ -46,7 +46,7 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/worker ./worker
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/worker ./worker
       - name: Push to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKER_HUB_USERNAME }}/worker
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/worker
