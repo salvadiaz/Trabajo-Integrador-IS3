@@ -23,7 +23,6 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-const REDIS_URI = process.env.REDISCLOUD_URL
 const DB_USER = process.env.POSTGRES_USER;
 const DB_PASS =  process.env.POSTGRES_PASS;
 const DB_HOST = process.env.POSTGRES_HOST;
