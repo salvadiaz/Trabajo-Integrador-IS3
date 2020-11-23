@@ -4,7 +4,6 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import java.sql.*;
 import org.json.JSONObject;
-import java.net.URI;
 
 class Worker {
   public static void main(String[] args) {
@@ -46,9 +45,8 @@ class Worker {
     }
   }
 
-  private static Jedis connectToRedis() throws URISyntaxException {
-    URI redisURI = new URI(System.getenv("REDIS_URL"));
-    Jedis jedis = new Jedis(redisURI);
+  private static Jedis connectToRedis() {
+    Jedis jedis = new Jedis(System.getenv("REDIS_URL"));
     return jedis;
   }
 
