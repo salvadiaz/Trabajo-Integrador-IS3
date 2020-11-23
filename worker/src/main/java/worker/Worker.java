@@ -46,7 +46,7 @@ class Worker {
   }
 
   private static Jedis connectToRedis() {
-    Jedis jedis = new Jedis(System.getenv("REDIS_URL"));
+    Jedis jedis = new Jedis(System.getenv("REDIS_URI"));
     return jedis;
   }
 
