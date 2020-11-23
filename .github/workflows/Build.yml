@@ -28,22 +28,22 @@ jobs:
           docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
       - name: Build Result Docker Image With Version
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/result:${{ env.RELEAS
-      - name: Push Result to Docker HubE_VERSION }} -t ${{ secrets.DOCKERHUB_USERNAME }}/result:latest  ./result
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/result:${{ env.RELEASE_VERSION }} ./result
+      - name: Push Result to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/result
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/result:${{ env.RELEASE_VERSION }}
       - name: Build Vote Docker Image With Version
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/vote:${{ env.RELEASE_VERSION }} -t ${{ secrets.DOCKERHUB_USERNAME }}/vote:latest ./vote
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/vote:${{ env.RELEASE_VERSION }} ./vote
       - name: Push Vote to Docker Hub
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/vote
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/vote:${{ env.RELEASE_VERSION }}
       - name: Build Worker Docker Image
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/worker:${{ env.RELEASE_VERSION }} -t ${{ secrets.DOCKERHUB_USERNAME }}/worker:latest ./worker
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/worker:${{ env.RELEASE_VERSION }} ./worker
       - name: Push Worker to Docker Hub With Version
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/worker
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/worker:${{ env.RELEASE_VERSION }}
      
       - name: Run Integration Tests with CodeceptJS
         run: |
