@@ -8,7 +8,7 @@ import org.json.JSONObject;
 class Worker {
   public static void main(String[] args) {
     try {
-      Jedis redis = connectToRedis(System.getenv("REDIS_HOST"));
+      Jedis redis = connectToRedis();
       Connection dbConn = connectToDB(System.getenv("POSTGRES_HOST"));
 
       System.err.println("Watching vote queue");
@@ -45,21 +45,10 @@ class Worker {
     }
   }
 
-  static Jedis connectToRedis(String host) {
-    Jedis conn = new Jedis(host);
-
-    while (true) {
-      try {
-        conn.keys("*");
-        break;
-      } catch (JedisConnectionException e) {
-        System.err.println("Waiting for redis");
-        sleep(1000);
-      }
-    }
-
-    System.err.println("Connected to redis");
-    return conn;
+  private static Jedis connectToRedis() throws URISyntaxException {
+    URI redisURI = new URI(System.getenv("REDIS_URL"));
+    Jedis jedis = new Jedis(redisURI);
+    return jedis;
   }
 
   static Connection connectToDB(String host) throws SQLException {
