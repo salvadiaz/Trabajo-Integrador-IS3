@@ -14,6 +14,8 @@ io.set('transports', ['polling']);
 
 var port = process.env.PORT || 4000;
 
+var POSTGRES_URI = process.env.POSTGRES_URI || 'postgres://postgres:postgres@db/postgres';
+
 io.sockets.on('connection', function (socket) {
 
   socket.emit('message', { text : 'Welcome!' });
@@ -23,11 +25,8 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-const POSTGRES_URI = process.env.DATABASE_URL || 'postgres://postgres:postgres@db/postgres';
-
-
 var pool = new pg.Pool({
-  connectionString: POSTGRES_URI;
+  connectionString: POSTGRES_URI
 });
 
 async.retry(
