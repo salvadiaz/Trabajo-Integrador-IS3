@@ -112,10 +112,10 @@ jobs:
         run: |
           heroku container:login
           
-      - name: Set ENV
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run: heroku config:set POST_URI=${{ secrets.POSTGRES_URI }} -a result-is3
+      #- name: Set ENV
+      #  env:
+      #    HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      #  run: heroku config:set POST_URI=${{ secrets.POSTGRES_URI }} -a result-is3
       
       - name: Push and Release
         env:
