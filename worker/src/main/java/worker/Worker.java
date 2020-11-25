@@ -1,5 +1,6 @@
 package worker;
 
+import org.jetbrains.annotations.NotNull;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 import java.sql.*;
@@ -8,8 +9,8 @@ import org.json.JSONObject;
 class Worker {
   public static void main(String[] args) {
     try {
-      Jedis redis = connectToRedis();
-      Connection dbConn = connectToDB(System.getenv("POSTGRES_HOST"));
+      Jedis redis = connectToRedis(strConnectionRedis());
+      Connection dbConn = connectToDB(new Jedis(strConnectionRedis()));
 
       System.err.println("Watching vote queue");
 
@@ -28,7 +29,7 @@ class Worker {
     }
   }
 
-  static void updateVote(Connection dbConn, String voterID, String vote) throws SQLException {
+  static void updateVote(@NotNull Connection dbConn, String voterID, String vote) throws SQLException {
     PreparedStatement insert = dbConn.prepareStatement(
       "INSERT INTO votes (id, vote) VALUES (?, ?)");
     insert.setString(1, voterID);
@@ -45,9 +46,23 @@ class Worker {
     }
   }
 
-  private static Jedis connectToRedis() {
-    Jedis jedis = new Jedis(System.getenv("REDIS_URI"));
-    return jedis;
+  public static String strConnectionRedis() {
+    return "redis://default:" + REDIS_PASSWORD + "@" + REDIS_HOST + ":" + REDIS_PORT;
+  }
+  
+  static Jedis connectToRedis(Jedis conn) {
+    while (true) {
+      try {
+        conn.keys("*");
+        break;
+      } catch (JedisConnectionException e) {
+        System.err.println("Waiting for redis");
+        sleep(1000);
+      }
+    }
+
+    System.err.println("Connected to redis");
+    return conn;
   }
 
   static Connection connectToDB(String host) throws SQLException {

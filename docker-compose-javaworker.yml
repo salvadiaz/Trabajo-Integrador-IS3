@@ -28,6 +28,13 @@ services:
     build:
       context: ./worker
       dockerfile: Dockerfile.j
+    environment:
+      REDIS_PORT: 6379
+      REDIS_HOST: redis
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     networks:
       - back-tier
 
