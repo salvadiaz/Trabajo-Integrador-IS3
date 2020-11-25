@@ -34,8 +34,8 @@ jobs:
           max_violations_rate: '0.1'
   
       
-  docker_build_and_push:
-    name: Docker build and push
+  result_build_and_push:
+    name: Result build and push
     runs-on: ubuntu-latest
     needs: [code_quality]
     
@@ -49,12 +49,79 @@ jobs:
       - name: Build Docker Images
         run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/result ./result
+         
+      - name: Push Docker Images
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/result
+          
+          
+  vote_build_and_push:
+    name: Vote build and push
+    runs-on: ubuntu-latest
+    needs: [code_quality]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: DockerHub Login
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      - name: Build Docker Images
+        run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/vote ./vote
+      
+      - name: Push Docker Images
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/vote
+          
+          
+  worker_build_and_push:
+    name: Worker build and push
+    runs-on: ubuntu-latest
+    needs: [code_quality]
+    
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        
+      - name: DockerHub Login
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      
+      - name: Build Docker Images
+        run: |
           docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/worker ./worker
       
       - name: Push Docker Images
         run: |
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/result
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/vote
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/worker
      
+ 
+  deploy_result_to_heroku:
+    name: Deploy result to heroku
+    runs-on: ubuntu-latest
+    needs: [result_build_and_push]
+   
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+     
+      - name: Heroku Login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku container:login
+          
+      - name: Set ENV
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku config:set POSTGRES_URI=${{ secrets.POSTGRES_URI }} -a result-is3
+      
+      - name: Push and Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./result
+          heroku container:push -a result-is3 web
+          heroku container:release -a result-is3 web
