@@ -23,7 +23,7 @@ io.sockets.on('connection', function (socket) {
   });
 });
 
-const POSTGRES_URI = process.env.POSTGRES_URI || 'postgres://postgres:postgres@db/postgres';
+const POSTGRES_URI = process.env.POST_URI || 'postgres://postgres:postgres@db/postgres';
 
 
 var pool = new pg.Pool({
