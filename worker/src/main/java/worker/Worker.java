@@ -47,7 +47,7 @@ class Worker {
   }
 
   public static String strConnectionRedis() {
-    return "redis://default:" + REDIS_PASSWORD + "@" + REDIS_HOST + ":" + REDIS_PORT;
+    return "redis://default:" + System.getenv("REDIS_PASSWORD") + "@" + System.getenv("REDIS_HOST") + ":" + System.getenv("REDIS_PORT");
   }
   
   static Jedis connectToRedis(Jedis conn) {
