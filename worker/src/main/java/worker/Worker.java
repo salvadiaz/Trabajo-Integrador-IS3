@@ -9,8 +9,8 @@ import org.json.JSONObject;
 class Worker {
   public static void main(String[] args) {
     try {
-      Jedis redis = connectToRedis(strConnectionRedis());
-      Connection dbConn = connectToDB(new Jedis(strConnectionRedis()));
+      Jedis redis = connectToRedis(new Jedis(strConnectionRedis()));
+      Connection dbConn = connectToDB(System.getenv("POSTGRES_HOST"));
 
       System.err.println("Watching vote queue");
 
