@@ -156,4 +156,3 @@ jobs:
           cd ./vote
           heroku container:push -a vote-is3 web
           heroku container:release -a vote-is3 web
-          
