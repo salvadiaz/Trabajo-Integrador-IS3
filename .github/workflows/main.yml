@@ -154,6 +154,6 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           cd ./result
-          heroku container:push -a vote-is3 web
-          heroku container:release -a vote-is3 web
+          heroku container:push -a vote-is3 web1
+          heroku container:release -a vote-is3 web1
           
