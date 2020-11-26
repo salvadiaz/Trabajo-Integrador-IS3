@@ -1,7 +1,8 @@
-Flask
-Redis
+Flask~=1.1.2
+Redis~=3.5.3
 gunicorn
-requests
+requests~=2.22.0
 pytest
 pytest-cov
 coverage
+unittest-xml-reporting~=3.0.4

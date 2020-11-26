@@ -1,5 +1,6 @@
 import requests
 import unittest
+import xmlrunner
 
 
 class UnitTest(unittest.TestCase):
@@ -9,28 +10,19 @@ class UnitTest(unittest.TestCase):
         response = requests.get(self.url)
         self.assertEqual(response.status_code, 200)
 
-    def test_post_status_200(self):
-        payload = {'vote': 'a'}
-        headers = {
-          'Cookie': 'voter_id=39e29be59e1d5c6'
-        }
-        response = requests.post(self.url, headers=headers, data=payload)
-        self.assertEqual(response.status_code, 200)
-
-    def test_post_status_400(self):
+    def test_incomplete_vote_status_400(self):
         response = requests.post(self.url)
-        self.assertEqual(response.status_code, 400)
-
-    def test_get_voter_id_cookie(self):
-        valid_cookie = '39e29be59e1d5c6'
-        payload = {'vote': 'a'}
-        headers = {
-          'Cookie': 'voter_id=39e29be59e1d5c6'
-        }
-        response = requests.post(self.url, headers=headers, data=payload)
-        self.assertEqual(response.cookies["voter_id"], valid_cookie)
+        self.assertEqual(response.status_code, 400)  # Bad Req
 
     def test_set_new_cookie(self):
         payload = {'vote': 'a'}
         response = requests.post(self.url, data=payload)
         assert response.cookies["voter_id"] is not None
+
+
+if __name__ == '__main__':
+    unittest.main(
+        testRunner=xmlrunner.XMLTestRunner(output='test-reports'),
+        # these make sure that some options that are not applicable
+        # remain hidden from the help menu.
+        failfast=False, buffer=False, catchbreak=False)
