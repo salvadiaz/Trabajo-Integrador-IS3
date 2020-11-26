@@ -4,7 +4,7 @@ import unittest
 
 
 class UnitTest(unittest.TestCase):
-    url = 'https://localhost:5000/'
+    url = 'https://is3-vote.herokuapp.com/'
 
     def test_get_status_200(self):
         response = requests.get(self.url)
