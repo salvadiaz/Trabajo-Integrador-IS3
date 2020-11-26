@@ -156,3 +156,39 @@ jobs:
           cd ./vote
           heroku container:push -a vote-is3 web
           heroku container:release -a vote-is3 web
+
+
+  deploy_worker_to_heroku:
+    name: Deploy worker to heroku
+    runs-on: ubuntu-latest
+    needs: [worker_build_and_push]
+   
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+     
+      - name: Heroku Login
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku container:login
+          
+      - name: Set ENV
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a worker-is3
+          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a worker-is3
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a worker-is3
+          heroku config:set POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} -a worker-is3
+          heroku config:set POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} -a worker-is3
+          heroku config:set POSTGRES_DB=${{ secrets.POSTGRES_DB }} -a worker-is3
+          heroku config:set POSTGRES_USER=${{ secrets.POSTGRES_USER }} -a worker-is3
+      
+      - name: Push and Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          cd ./worker
+          heroku container:push -a worker-is3 web
+          heroku container:release -a worker-is3 web
