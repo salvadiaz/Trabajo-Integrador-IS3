@@ -50,10 +50,10 @@ def hello():
 
 def count_vote(vote, voter_id):
     if request.method == 'POST':
-        redis = get_redis(REDIS_HOST=REDIS_HOST, REDIS_PASSWORD=REDIS_PASSWORD, REDIS_PORT=REDIS_PORT)
+        # redis = get_redis(REDIS_HOST=REDIS_HOST, REDIS_PASSWORD=REDIS_PASSWORD, REDIS_PORT=REDIS_PORT)
         vote = request.form['vote']
         data = json.dumps({'voter_id': voter_id, 'vote': vote})
-        redis.rpush('votes', data)
+        # redis.rpush('votes', data)
     return vote
 
 
