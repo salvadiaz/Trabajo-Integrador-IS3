@@ -173,9 +173,9 @@ jobs:
         run: |
           heroku container:login
           
-      - name: Set ENV
-        env:
-          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      #- name: Set ENV
+        #env:
+        #  HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         #run: |
         #  heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a worker-is3
         #  heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a worker-is3
