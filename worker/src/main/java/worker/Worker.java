@@ -51,17 +51,7 @@ class Worker {
   }
   
   static Jedis connectToRedis(Jedis conn) {
-    while (true) {
-      try {
-        conn.keys("*");
-        break;
-      } catch (JedisConnectionException e) {
-        System.err.println("Waiting for redis");
-        sleep(1000);
-      }
-    }
-
-    System.err.println("Connected to redis");
+    
     return conn;
   }
 
