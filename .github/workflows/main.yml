@@ -146,8 +146,8 @@ jobs:
           HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run: |
           heroku config:set REDIS_PORT=${{ secrets.REDIS_PORT }} -a vote-is3
-          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a tp-vote
-          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a tp-vote
+          heroku config:set REDIS_HOST=${{ secrets.REDIS_HOST }} -a vote-is3
+          heroku config:set REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }} -a vote-is3
       
       - name: Push and Release
         env:
