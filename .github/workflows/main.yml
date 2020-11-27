@@ -230,19 +230,15 @@ jobs:
         run: |
           cd ./integration
           npm install
+      
       - name: testing
         run: |
           cd ./integration
           npx codeceptjs run --steps --reporter mocha-multi
-      - name: Publish Integration Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.4
-        if: ${{ always() }}
+      
+      - name: Upload Unit Test Results
+        uses: actions/upload-artifact@v2
         with:
-          github_token: ${{ secrets.GIT_TOKEN }}
-          check_name: Integration Test Result
-          comment_title: Integration Test Statistics
-          hide_comments: all but latest
-          comment_on_pr: true
-          files: junit/result.xml
-          report_individual_runs: true
-          deduplicate_classes_by_file_name: false
+          name: Unit Test Results (Python ${{ matrix.python-version }})
+          path: junit/results.xml
+        if: ${{ always() }}
