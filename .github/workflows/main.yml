@@ -53,6 +53,24 @@ jobs:
           pip install -r requirements.txt
       - name: PyTest
         run: python -m pytest ./vote/test --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
+      - name: Upload Unit Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: Unit Test Results (Python ${{ matrix.python-version }})
+          path: junit/test-results.xml
+        if: ${{ always() }}
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.4
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+          check_name: Unit Test Results
+          comment_title: Unit Test Statistics
+          hide_comments: all but latest
+          comment_on_pr: true
+          files: junit/test-results.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
   
       
   result_build_and_push:
