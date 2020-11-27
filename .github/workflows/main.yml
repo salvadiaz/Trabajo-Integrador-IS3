@@ -220,10 +220,10 @@ jobs:
           heroku container:release -a worker-is3 web
           
   
-   integration_test:
+  integration_test:
     name: Integration Test
     runs-on: ubuntu-latest
-    needs: [deployResult, deployVote, deployWorker]
+    needs: [deploy_result_to_heroku, deploy_vote_to_heroku, deploy_worker_to_heroku]
     steps:
       - uses: actions/checkout@v2
       - name: Building
