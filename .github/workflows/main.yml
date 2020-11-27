@@ -220,23 +220,29 @@ jobs:
           heroku container:release -a worker-is3 web
           
   
-  integrationTest:
+   integration_test:
     name: Integration Test
     runs-on: ubuntu-latest
-    needs: [deploy_result_to_heroku, deploy_vote_to_heroku, deploy_worker_to_heroku]
+    needs: [deployResult, deployVote, deployWorker]
     steps:
       - uses: actions/checkout@v2
       - name: Building
         run: |
-          cd ./integration-test
+          cd ./integration
           npm install
       - name: testing
         run: |
-          cd ./integration-test
+          cd ./integration
           npx codeceptjs run --steps --reporter mocha-multi
-      - name: Upload Unit Test Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: Unit Test Results (Python ${{ matrix.python-version }})
-          path: junit/result.xml
+      - name: Publish Integration Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.4
         if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+          check_name: Integration Test Result
+          comment_title: Integration Test Statistics
+          hide_comments: all but latest
+          comment_on_pr: true
+          files: junit/result.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
