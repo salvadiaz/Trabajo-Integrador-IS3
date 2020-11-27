@@ -240,5 +240,5 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Integration Tests Results (Codeceptjs)
-          path: junit/result.xml
+          path: integration/junit/result.xml
         if: ${{ always() }}
