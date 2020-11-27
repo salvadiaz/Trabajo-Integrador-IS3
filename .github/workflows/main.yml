@@ -62,19 +62,6 @@ jobs:
           path: junit/test-results.xml
         if: ${{ always() }}
       
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.5
-        if: ${{ always() }}
-        with:
-          github_token: ${{ secrets.GIT_TOKEN }}
-          check_name: Unit Testing Vote Report
-          hide_comments: all but latest
-          comment_on_pr: true
-          files: junit/*.xml
-          report_individual_runs: true
-          deduplicate_classes_by_file_name: false
-
-      
       
   result_build_and_push:
     name: Result build and push
