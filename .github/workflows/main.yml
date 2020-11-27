@@ -31,7 +31,6 @@ jobs:
           max_complex_functions_rate: '0.1'
           max_long_functions_rate: '0.1'
           max_defects_rate: '0.1'
-          max_violations_rate: '0.1'
           
           
   unit_test_vote:
