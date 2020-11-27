@@ -239,6 +239,6 @@ jobs:
       - name: Upload Unit Test Results
         uses: actions/upload-artifact@v2
         with:
-          name: Unit Test Results (Python ${{ matrix.python-version }})
+          name: Integration Tests Results (Codeceptjs)
           path: junit/results.xml
         if: ${{ always() }}
