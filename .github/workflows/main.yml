@@ -58,18 +58,27 @@ jobs:
           name: Unit Test Results (Python ${{ matrix.python-version }})
           path: junit/test-results.xml
         if: ${{ always() }}
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.4
-        if: ${{ always() }}
+      
+      
+  publish-test-results:
+    name: "Publish Unit Tests Results"
+    needs: unit_test_vote
+    runs-on: ubuntu-latest
+    # the build-and-test job might be skipped, we don't need to run this job then
+    if: success() || failure()
+
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
         with:
-          github_token: ${{ secrets.GIT_TOKEN }}
+          path: artifacts
+
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.5
+        with:
           check_name: Unit Test Results
-          comment_title: Unit Test Statistics
-          hide_comments: all but latest
-          comment_on_pr: true
+          github_token: ${{ secrets.GIT_TOKEN }}
           files: junit/test-results.xml
-          report_individual_runs: true
-          deduplicate_classes_by_file_name: false
 
       
   result_build_and_push:
