@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="Mocha Tests" time="7.1330" tests="2" failures="0">
+  <testsuite name="Root Suite" timestamp="2020-11-27T00:04:02" tests="0" time="0.0000" failures="0">
+  </testsuite>
+  <testsuite name="vote" timestamp="2020-11-27T00:04:02" tests="2" file="/home/salva/Trabajo-Integrador-IS3/integration/vote_test.js" time="7.1330" failures="0">
+    <testcase name="vote: I am on hme view" time="3.3130" classname="I am on hme view">
+    </testcase>
+    <testcase name="vote: Testing Result View" time="3.8200" classname="Testing Result View">
+    </testcase>
+  </testsuite>
+</testsuites>
