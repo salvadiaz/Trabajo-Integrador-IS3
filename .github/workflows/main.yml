@@ -54,14 +54,14 @@ jobs:
           pip install -r requirements.txt
      
       - name: PyTest
-        run: python -m pytest test --junit-xml pytest.xml
+        run: python -m pytest vote/test --junit-xml vote/pytest.xml
      
       - name: Upload Unit Test Results
         if: always()
         uses: actions/upload-artifact@v2
         with:
           name: Unit Test Results (Python ${{ matrix.python-version }})
-          path: pytest.xml
+          path: vote/pytest.xml
           
         
   publish-test-results:
