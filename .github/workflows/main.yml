@@ -60,27 +60,6 @@ jobs:
         if: ${{ always() }}
       
       
-  publish-test-results:
-    name: "Publish Unit Tests Results"
-    needs: unit_test_vote
-    runs-on: ubuntu-latest
-    # the build-and-test job might be skipped, we don't need to run this job then
-    if: success() || failure()
-
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-        with:
-          path: artifacts
-
-      - name: Publish Unit Test Results
-        uses: EnricoMi/publish-unit-test-result-action@v1.5
-        with:
-          check_name: Unit Test Results
-          github_token: ${{ secrets.GIT_TOKEN }}
-          files: junit/test-results.xml
-
-      
   result_build_and_push:
     name: Result build and push
     runs-on: ubuntu-latest
@@ -239,3 +218,31 @@ jobs:
           cd ./worker
           heroku container:push -a worker-is3 web
           heroku container:release -a worker-is3 web
+          
+  
+  integrationTest:
+    name: Integration Test
+    runs-on: ubuntu-latest
+    needs: [deploy_result_to_heroku, deploy_vote_to_heroku, deploy_worker_to_heroku]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Building
+        run: |
+          cd ./integration-test
+          npm install
+      - name: testing
+        run: |
+          cd ./integration-test
+          npx codeceptjs run --steps --reporter mocha-multi
+      - name: Publish Integration Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.4
+        if: ${{ always() }}
+        with:
+          github_token: ${{ secrets.GIT_TOKEN }}
+          check_name: Integration Test Result
+          comment_title: Integration Test Statistics
+          hide_comments: all but latest
+          comment_on_pr: true
+          files: junit/result.xml
+          report_individual_runs: true
+          deduplicate_classes_by_file_name: false
