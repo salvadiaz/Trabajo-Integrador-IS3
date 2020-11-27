@@ -56,12 +56,12 @@ jobs:
       - name: PyTest
         run: python -m pytest ./vote/test --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
      
-      - name: Upload Unit Test Results
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1.5
         if: always()
-        uses: actions/upload-artifact@v2
         with:
-          name: Unit Test Results (Python ${{ matrix.python-version }})
-          path: pytest.xml
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          files: vote/**/*.xml
   
       
   result_build_and_push:
