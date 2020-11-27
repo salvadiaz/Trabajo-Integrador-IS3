@@ -62,7 +62,6 @@ jobs:
         with:
           name: Unit Test Results (Python ${{ matrix.python-version }})
           path: pytest.xml
-        if: ${{ always() }}
   
       
   result_build_and_push:
