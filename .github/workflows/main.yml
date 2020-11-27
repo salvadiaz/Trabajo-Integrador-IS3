@@ -37,7 +37,7 @@ jobs:
   unit_test_vote:
     name: Unit Test with Python
     runs-on: ubuntu-latest
-    needs: [docker]
+    needs: [code_quality]
     strategy:
       matrix:
         python-version: [3.7]
