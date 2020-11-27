@@ -32,6 +32,27 @@ jobs:
           max_long_functions_rate: '0.1'
           max_defects_rate: '0.1'
           max_violations_rate: '0.1'
+          
+          
+  unit_test_vote:
+    name: Unit Test with Python
+    runs-on: ubuntu-latest
+    needs: [code_quality]
+    strategy:
+      matrix:
+        python-version: [3.7]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          cd ./vote
+          pip install -r requirements.txt
+      - name: PyTest
+        run: python -m pytest ./vote/test --doctest-modules --junitxml=junit/test-results.xml --cov=com --cov-report=xml --cov-report=html
   
       
   result_build_and_push:
@@ -58,7 +79,7 @@ jobs:
   vote_build_and_push:
     name: Vote build and push
     runs-on: ubuntu-latest
-    needs: [code_quality]
+    needs: [code_quality, unit_test_vote]
     
     steps:
       - name: Checkout Code
